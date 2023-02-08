@@ -1,5 +1,7 @@
 from django import forms
-from rango.models import Page, Category
+from django.contrib.auth.models import User
+from rango.models import Page, Category, UserProfile
+
 
 class CategoryForm(forms.ModelForm):
     # Need to add HiddenInputs for all fields even if we don't input data for them or the form won't return a value for them at all
@@ -10,8 +12,9 @@ class CategoryForm(forms.ModelForm):
 
     # Inline class that provides additional information on the form
     class Meta:
-        model = Category # Provides an association between the ModelForm and a model
-        fields = ('name',) # State what fields we want
+        model = Category  # Provides an association between the ModelForm and a model
+        fields = ('name',)  # State what fields we want
+
 
 class PageForm(forms.ModelForm):
     title = forms.CharField(max_length=Page.TITLE_MAX_LENGTH, help_text="Please enter the title of the page.")
@@ -20,4 +23,18 @@ class PageForm(forms.ModelForm):
 
     class Meta:
         model = Page
-        exclude = ('category',) # Explicitly states what fields we dont want
+        exclude = ('category',)  # Explicitly states what fields we dont want
+
+
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password',)
+
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('website', 'picture',)
